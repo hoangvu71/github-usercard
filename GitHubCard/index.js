@@ -2,7 +2,13 @@
            (replacing the palceholder with your Github name):
            https://api.github.com/users/<your name>
 */
-
+axios.get("https://api.github.com/users/hoangvu71")
+  .then((res) => {
+    console.log(dataFromGit);
+  })
+  .catch((err) => {
+    console.log('Error!')
+  })
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
@@ -53,3 +59,49 @@ const followersArray = [];
   luishrd
   bigknell
 */
+
+function createFollowComponents(data) {
+  ////////////////////////////
+  // Create Elements
+  const divCard = document.createElement('div');
+  const imageUser = document.createElement('img');
+  const cardInfo = document.createElement('div');
+  const h3userName = document.createElement('h3');
+  const pUserName = document.createElement('p');
+  const pLocation = document.createElement('p');
+  const pProfile = document.createElement('p');
+  const linkGitHub = document.createElement('a');
+  const pFollowers = document.createElement('p');
+  const pFollowing = document.createElement('p');
+  const pUserBio = document.createElement('p');
+
+  ////////////////////////////
+  // Create Path
+  // All paths under divCard:
+  divCard.appendChild(imageUser);
+  divCard.appendChild(cardInfo);
+  // All paths under cardInfo:
+  cardInfo.appendChild(h3userName);
+  cardInfo.appendChild(pUserName);
+  cardInfo.appendChild(pLocation);
+  cardInfo.appendChild(pProfile);
+  cardInfo.appendChild(pFollowers);
+  cardInfo.appendChild(pFollowing);
+  cardInfo.appendChild(pUserBio);
+  // All paths under pProfile:
+  pProfile.appendChild(linkGitHub);
+
+  ////////////////////////////
+  // Create Classnames
+  divCard.classList.add("card");
+  cardInfo.classList.add("card-info");
+  h3userName.classList.add("name");
+  pUserName.classList.add("username");
+
+  ////////////////////////////
+  // Create Textcontent
+
+  return divCard;
+}
+
+console.log(createFollowComponents());
