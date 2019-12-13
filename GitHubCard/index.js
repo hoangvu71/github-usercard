@@ -2,13 +2,20 @@
            (replacing the palceholder with your Github name):
            https://api.github.com/users/<your name>
 */
-axios.get("https://api.github.com/users/hoangvu71")
-  .then((res) => {
-    console.log(dataFromGit);
+const followersArray =[];
+const accordian = document.querySelector('.cards');
+
+axios.get("https://api.github.com/users/hoangvu71").then((res) => {
+  console.log(res);
+    const user = res.data;
+    const newCard = createFollowComponents(user);
+    accordian.appendChild(newCard);
   })
   .catch((err) => {
     console.log('Error!')
   })
+
+
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
@@ -30,7 +37,6 @@ axios.get("https://api.github.com/users/hoangvu71")
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -89,7 +95,6 @@ function createFollowComponents(data) {
   cardInfo.appendChild(pFollowing);
   cardInfo.appendChild(pUserBio);
   // All paths under pProfile:
-  pProfile.appendChild(linkGitHub);
 
   ////////////////////////////
   // Create Classnames
@@ -100,8 +105,39 @@ function createFollowComponents(data) {
 
   ////////////////////////////
   // Create Textcontent
+  imageUser.src = data.avatar_url;
+  imageUser.alt = "Git Avatar";
+  h3userName.textContent = data.name;
+  pUserName.textContent = data.login;
+  pLocation.textContent = `Location: ${data.location}`;
+  pProfile.textContent = "Profile:";
+  pProfile.appendChild(linkGitHub);
+  linkGitHub.href = data.html_url;
+  linkGitHub.textContent = data.html_url;
+  pFollowers.textContent = `Followers: ${data.followers}`;
+  pFollowing.textContent = `Following: ${data.following}`;
+  pUserBio.textContent = data.bio;
 
   return divCard;
 }
 
-console.log(createFollowComponents());
+
+
+function createFollowers(){
+  axios.get("https://api.github.com/users/hoangvu71/followers")
+  .then((res) => {
+    for (let i = 0; i < 5; i++){
+      followersArray.push(res.data[i])
+      function getFollowersLogin(login){
+        axios.get(`https://api.github.com/users/${login}`)
+        .then((res) => {
+          accordian.appendChild(createFollowComponents(res.data));
+        })
+      }
+      getFollowersLogin(res.data[i].login);
+    }
+  })
+}
+
+createFollowers();
+console.log(followersArray);
